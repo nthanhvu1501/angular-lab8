@@ -1,0 +1,60 @@
+<div class="card mt-3">
+  <div class="card-header">
+    <h4>Product list</h4>
+  </div>
+  <div class="card-body">
+    <div class="row mb-2">
+      <label class="col-2 form-label ">Filter:</label>
+      <div class="col-3">
+        <input type="text" class="form-control " [(ngModel)]='listFilter'>
+      </div>
+      <div class="col-7"></div>
+    </div>
+    <div class="row mb-2">
+      <h2 class="col-12">Filter by: {{_listFilter}}</h2>
+    </div>
+    <div class="d-flex align-items-center justify-content-between ">
+      <button class="btn btn-primary " (click)="toggleImage()">
+        <span *ngIf="isShowImage">Hide</span>
+        <span *ngIf="!isShowImage">Show</span>
+        image
+      </button>
+      <div *ngIf="message" class="alert alert-success" role="alert">
+        {{message}}
+      </div>
+    </div>
+    <div class="table-responsive ">
+      <table class="table table-striped  table-hover ">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Code</th>
+            <th>Available</th>
+            <th>Price </th>
+            <th>5 Star Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let p of products | paginate: { itemsPerPage: 3, currentPage: p }'>
+            <td>
+              <img *ngIf="isShowImage" [src]="p.imageUrl" width="50" [title]="p.productName | uppercase">
+            </td>
+            <td>
+              <a class="text-decoration-none " routerLink="/products/{{p.productId}}">
+                {{p.productName | uppercase}}
+              </a>
+            </td>
+            <td>{{p.productCode}}</td>
+            <td>{{p.releaseDate}}</td>
+            <td>{{p.price | currency:'USD':true:'1.2-2'}}</td>
+            <td>
+              <app-star [rating]="p.starRating" (ratingClicked)="onRatingClicked($event)"></app-star>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
